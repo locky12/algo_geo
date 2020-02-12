@@ -46,8 +46,7 @@ class HalfedgeMesh:
 
 
 
-        self.vertices = verticesOFF
-0 0 0.0
+        self.vertices = vertices
         self.halfedges = halfedges
         self.facets = facets
         self.filename = filename
