@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import numpy as np
-import linalg as lg
-import halfedge_mesh
-
-
-a = halfedge_mesh.HalfedgeMesh()
-a.write_file("test.txt")
-=======
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -47,8 +38,7 @@ for i in mesh.vertices:
 
 test_v[0].descendre()
 for i in test_v :
-    print( i.poids , i.index ) 
+    print( i.poids , i.index )
 
 
 print("=============================")
->>>>>>> 2f669bdee9c145c854320777fb9572b96d74fe10
