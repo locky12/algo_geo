@@ -1,23 +1,23 @@
 #===============================================#
-# Notepatch 1.1
-# 29/01/2020
-# François-Xavier Marcheix
+ Notepatch 1.1
+ 29/01/2020
+ François-Xavier Marcheix
 #===============================================#
 
-# Rapport de code :
+ Rapport de code :
 
 => Les commantaires ne sont pas gérer
 => Pas de couleur
 => Espace non gérer
 
-# class HalfedgeMesh
+ class HalfedgeMesh
 
 - Correction du chargement des fichiers off
 	=> les commentaire '#' sont pris en compte par le programme
 	=> modifier : parse_off , parse_build_halfedge_off , read_off_vertices
 
 
-# class Facet
+ class Facet
 
 - nouvelle fonction 
 
@@ -25,20 +25,20 @@
 
 	=> adjacent_halfedges(self) renvoie les arrêtes du triangles
 		to do : renvoie sous forme obj
-
+#
 #===============================================#
-# Notepatch 1.2
-# 05/02/2020
-# François-Xavier Marcheix
+ Notepatch 1.2
+ 05/02/2020
+ François-Xavier Marcheix
 #===============================================#
 
-# Rapport de code :
+ Rapport de code :
 
 => Ajout de l'aire d'une face triangulaire
 => Ajout de l'aire d'un modele
 
 
-# class Vertex
+ class Vertex
 
 - nouvelle fonction 
 
@@ -57,28 +57,28 @@
 	=> descendre(self) fait un dijstra sur le point actuel
 		// peut être optimisé par un trie
 
-# class Facet
+ class Facet
 
 	=> aire_tri(self) renvoie l'aire de la face
 
-# Autre 
+ Autre 
 
 	- le model cube.off ne fonctionne pas sur Voisin()
 		// Soit car voisin ne fonctionne pas
 		// Soit il est sans bord
-
+#
 #===============================================#
-# Notepatch 1.3
-# 12/02/2020
-# François-Xavier Marcheix
+ Notepatch 1.3
+ 12/02/2020
+ François-Xavier Marcheix
 #===============================================#
 
-# class Facet
+ class Facet
 
 	- couleurs = [ 0 , 0 , 0 ]
 	- La fonction voisin est modifier
 
-
+#
 #===============================================#
 Git :
 
