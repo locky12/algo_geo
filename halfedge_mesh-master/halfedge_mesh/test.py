@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -43,7 +43,7 @@ for i in test_v :
 
 
 print("=============================")
-=======
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -88,4 +88,4 @@ for i in test_v :
 
 
 print("=============================")
->>>>>>> ad3e8ff20d102902ef91f284c848ee6cfeb40d8f
+

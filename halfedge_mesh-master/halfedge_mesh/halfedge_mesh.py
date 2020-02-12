@@ -323,6 +323,9 @@ class Vertex:
         self.couleurs = [0,0,0]
         self.index = index
         #
+        self.poids = 0
+        self.drapeau = 0
+        #
         self.halfedge = halfedge
 
     def __eq__(x, y):
