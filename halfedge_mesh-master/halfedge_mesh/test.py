@@ -1,4 +1,7 @@
 import numpy as np
 import linalg as lg
+import halfedge_mesh
 
-print("hello")
+
+a = halfedge_mesh.HalfedgeMesh()
+a.write_file("test.txt")

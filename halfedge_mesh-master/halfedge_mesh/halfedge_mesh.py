@@ -1,5 +1,5 @@
-<import sys
-from . import config
+import sys
+# from . import config
 import math
 import functools
 
@@ -36,7 +36,7 @@ class HalfedgeMesh:
             vertices  - a list of Vertex types
             halfedges - a list of HalfEdge types
             facets    - a list of Facet types
-        """import halfedge_mesh
+        """
 
 
 
@@ -54,6 +54,16 @@ class HalfedgeMesh:
             self.vertices, self.halfedges, self.facets, self.edges = \
                     self.read_file(filename)
 
+    def write_file(self, filename) :
+        with open(filename, 'w') as file:
+            file.write("OFF\n")
+
+            file.write(str(len(self.vertices)) + " " +  str(len(self.facets)) + " " + str(len(self.halfedges)/2)+ "\n" )
+            for vertice in self.vertices :
+                file.write(str(self.vertice.x) + " " + str(self.vertice.y) + " " + str(self.vertice.z)+" "+ str(self.couleurs[0]) + " " + str(self.couleurs[1]) + " " + str(self.couleurs[2]) + "\n")
+            for facet in self.facets :
+                file.write(str(self.facet.a) + " " + str(self.facet.b) + " " + str(self.facet.c)+" "+ str(self.couleurs[0]) + " " + str(self.couleurs[1]) + " " + str(self.couleurs[2]) +"\n")
+
     def __eq__(self, other):
         return (isinstance(other, type(self)) and
             (self.vertices, self.halfedges, self.facets) ==
@@ -69,6 +79,7 @@ class HalfedgeMesh:
         Returns a HalfedgeMesh
         """
         try:
+
             with open(filename, 'r') as file:
 
                 first_line = file.readline().strip().upper()
@@ -280,7 +291,7 @@ class Vertex:
         self.x = x
         self.y = yvertex
         self.z = z
-
+        self.couleurs = [0,0,0]
         self.index = index
 
         self.halfedge = halfedge
@@ -312,6 +323,7 @@ class Facet:
         self.c = c
         self.index = index
         # halfedge going ccw around this facet.
+        self.couleurs = [0,0,0]
         self.halfedge = halfedge
 
     def __eq__(self, other):
@@ -358,7 +370,7 @@ class Halfedge:
                  facet=None, index=None):
         """Create a halfedge with given index.
         """
-        self.oppos(ite = opposite
+        self.oppos(ite = opposite)
         self.next = next
         self.prev = prev
         self.vertex = vertex
@@ -367,7 +379,9 @@ class Halfedge:
 
     def __eq__(self, other):
         # TODO Test more
-        return (self.vertex == other.vertex) and \
+        return (self.vertex ==
+
+        other.vertex) and \
                (self.prev.vertex == other.prev.vertex) and \
                (self.index == other.index)
 
