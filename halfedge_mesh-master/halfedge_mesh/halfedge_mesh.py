@@ -61,13 +61,13 @@ class HalfedgeMesh:
 
     def write_file(self, filename) :
         with open(filename, 'w') as file:
-            file.write("OFF\n")
+            file.write("COFF\n")
 
             file.write(str(len(self.vertices)) + " " +  str(len(self.facets)) + " " + str(len(self.halfedges)/2)+ "\n" )
             for vertice in self.vertices :
-                file.write(str(self.vertice.x) + " " + str(self.vertice.y) + " " + str(self.vertice.z)+" "+ str(self.couleurs[0]) + " " + str(self.couleurs[1]) + " " + str(self.couleurs[2]) + "\n")
+                file.write(str(vertice.x) + " " + str(vertice.y) + " " + str(vertice.z)+" "+ str(vertice.couleurs[0]) + " " + str(vertice.couleurs[1]) + " " + str(vertice.couleurs[2]) + "\n")
             for facet in self.facets :
-                file.write(str(self.facet.a) + " " + str(self.facet.b) + " " + str(self.facet.c)+" "+ str(self.couleurs[0]) + " " + str(self.couleurs[1]) + " " + str(self.couleurs[2]) +"\n")
+                file.write("3" + "  " +str(facet.a) + " " + str(facet.b) + " " + str(facet.c)+" "+ str(facet.couleurs[0]) + " " + str(facet.couleurs[1]) + " " + str(facet.couleurs[2]) +"\n")
 
     def __eq__(self, other):
         return (isinstance(other, type(self)) and
