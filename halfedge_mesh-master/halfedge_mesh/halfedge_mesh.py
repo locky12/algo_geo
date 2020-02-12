@@ -1,5 +1,4 @@
-<import sys
-from . import config
+import sys
 import math
 import functools
 
@@ -26,6 +25,12 @@ else:
 
 # TODO: Reorder functions
 
+EPSILON = 1e-6
+
+
+
+#==========================================================================#
+
 class HalfedgeMesh:
 
     def __init__(self, filename=None, vertices=[], halfedges=[], facets=[]):
@@ -36,10 +41,7 @@ class HalfedgeMesh:
             vertices  - a list of Vertex types
             halfedges - a list of HalfEdge types
             facets    - a list of Facet types
-        """import halfedge_mesh
-
-
-
+        """
 
         self.vertices = vertices
         self.halfedges = halfedges
@@ -65,7 +67,6 @@ class HalfedgeMesh:
 
     def read_file(self, filename):
         """Determine the type of file and use the appropriate parser.
-
         Returns a HalfedgeMesh
         """
         try:
@@ -97,16 +98,23 @@ class HalfedgeMesh:
         vertices = []
 
         # Read all the vertices in
-        for index in xrange(number_vertices):
+        index = 0
+        while index != number_vertices :
+
             line = file_object.readline().split()
+            print(line)
+            # Prise en compte des commentaires
+            if line[0][0] == "#" :
+                continue
 
-            try:
-                # convert strings to floats
-                line = list(map(float, line))
-            except ValueError as e:
-                raise ValueError("vertices " + str(e))
-
-            vertices.append(Vertex(line[0], line[1], line[2], index))
+            else :
+                try:
+                    # convert strings to floats
+                    line = list(map(float, line))
+                except ValueError as e:
+                    raise ValueError("vertices " + str(e))
+                vertices.append(Vertex(line[0], line[1], line[2], index))
+                index += 1
 
         return vertices
 
@@ -143,10 +151,18 @@ class HalfedgeMesh:
 
         # For each facet
         for index in xrange(number_facets):
-            line = file_object.readline().split()
 
             # convert strings to ints
-            line = list(map(int, line))
+            true_start = 1
+            while true_start == 1 :
+                line = file_object.readline().split()
+                # Prise en compte des commentaires
+                if line[0][0] == "#" :
+                    continue
+                else :
+                    line = list(map(int, line))
+                    true_start = 0
+
 
             # TODO: make general to support non-triangular meshes
             # Facets vertices are in counter-clockwise order
@@ -194,8 +210,15 @@ class HalfedgeMesh:
         """
         facets, halfedges, vertices = [], [], []
 
-        # TODO Make ability to discard # lines
-        vertices_faces_edges_counts = list(map(int, file_object.readline().split()))
+        true_start = 1
+        while true_start == 1 :
+            line = file_object.readline().split()
+            # Prise en compte des commentaires
+            if line[0][0] == "#" :
+                continue
+            else :
+                vertices_faces_edges_counts = list(map(int, line))
+                true_start = 0
 
         number_vertices = vertices_faces_edges_counts[0]
         vertices = self.read_off_vertices(file_object, number_vertices)
@@ -263,9 +286,12 @@ class HalfedgeMesh:
 
         self.halfedges = hlist
 
+    # new 1.2 //
+
+
+#==========================================================================#
 
 class Vertex:
-
 
     def __init__(self, x=0, y=0, z=0, index=None, halfedge=None):
         """Create a vertex with given index at given point.
@@ -276,13 +302,18 @@ class Vertex:
         index    - integer index of this vertex
         halfedge - a halfedge that points to the vertex
         """
-
+        # Coordonnées :
         self.x = x
-        self.y = yvertex
+        self.y = y
         self.z = z
-
+        # parcour 1.2 :
+        self.drapeau = 0
+        self.poids = 0
+        # couleur 1.3 :
+        self.couleurs = [ 0 , 0 , 0 ]
+        # indentifiant :
         self.index = index
-
+        #
         self.halfedge = halfedge
 
     def __eq__(x, y):
@@ -297,6 +328,64 @@ class Vertex:
     def get_vertex(self):
         return [self.x, self.y, self.z]
 
+    # new 1.2 // to do seulement 2 poid donnée pb
+    def Voisin(self):
+        edge_copy = self.halfedge
+        edge = self.halfedge.opposite.next
+        edge2 = self.halfedge.next.next
+        liste = []
+        liste.append( [ edge.vertex , self.distance(edge.vertex) ] )
+        liste.append( [ edge2.vertex , self.distance(edge2.vertex) ] )
+        while (edge != edge_copy) :
+            edge = edge.opposite.next
+            if( edge != edge_copy ) :
+                liste.append( [edge.vertex, self.distance(edge.vertex) ] )
+        return liste
+
+    # new 1.2
+    def init_Dijkstra(self):
+        self.drapeau = 0
+        self.poids = 0
+
+    # new 1.2 // Fait un Dijkstra sur les voisins du point actuel
+    def descendre(self):
+        liste_voisin = self.Voisin()
+        #Optimisation : on prend la plus petit distance en premier
+        liste_voisin = sorted(liste_voisin, key=lambda liste_voisin: liste_voisin[1])
+        if( self.drapeau == 2 ):
+            return 1
+        else :
+            self.drapeau = 1
+            for index in liste_voisin :
+                if( index[0].drapeau == 0 ):
+                    index[0].poids = index[1] + self.poids
+                    index[0].drapeau = 1
+                elif( index[0].drapeau == 1):
+                    if( index[0].poids > index[1] + self.poids ):
+                        index[0].poids = index[1] + self.poids
+            for index in liste_voisin :
+                self.drapeau = 2
+                index[0].descendre()
+        return 0
+
+    # new 1.2 Renvoie la distance entre 2 points
+    def distance(self,other):
+        return (pow((self.x - other.x),2) + pow((self.y - other.y),2) + pow((self.z - other.z),2))
+
+    # new 1.2 Fait le produit vectoriel entre 2 points
+    def produit_vectoriel(self,other):
+        a = self.y*other.z - self.z*other.y
+        b = self.z*other.x - self.x*other.z
+        c = self.x*other.y - self.y*other.x
+        return [a,b,c]
+
+    # new 1.3
+    def new_couleurs( tab_rvb ):
+        self.couleurs = tab_rvb
+    
+
+
+#==========================================================================#
 
 class Facet:
 
@@ -314,6 +403,9 @@ class Facet:
         # halfedge going ccw around this facet.
         self.halfedge = halfedge
 
+        # couleur
+        self.couleurs = [ 0 , 0 , 0 ]
+
     def __eq__(self, other):
         return self.a == other.a and self.b == other.b and self.c == other.c \
             and self.index == other.index and self.halfedge == other.halfedge
@@ -321,11 +413,51 @@ class Facet:
     def __hash__(self):
         return hash(self.halfedge) ^ hash(self.a) ^ hash(self.b) ^ \
             hash(self.c) ^ hash(self.index) ^ \
-            hash((self.halfedges, self.a, self.b, self.c, self.index))
+            hash((self.halfedge, self.a, self.b, self.c, self.index))
+
+    # new : 1.1 // renvoie les index des points
+    def adjacent_vertices(self):
+        return [ self.a , self.b , self.c ]
+    # new : 1.1 //
+    def adjacent_halfedges(self):
+        g = self.halfedge
+        li = []
+        li.append(g)
+        while g != self.halfedge.next :
+            li.append( self.halfedge )
+            self.halfedge = self.halfedge.next
+        return li
+    # new : 1.1 // Renvoie les index
+    def adjacent_halfedges_index(self):
+        g = self.halfedge
+        li = []
+        li.append(g.index)
+        while g != self.halfedge.next :
+            li.append( self.halfedge.index )
+            self.halfedge = self.halfedge.next
+        return li
+    # new : 1.2 // to do : structure de donnée problématique
+    def aire_tri(self):
+        liste_p = self.adjacent_vertices_obj()
+        v1 = liste_p[0].produit_vectoriel(liste_p[1])
+        v2 = liste_p[0].produit_vectoriel(liste_p[2])
+        return 0.5*norm(dot(v1,v2) )
+    # new : 1.1 // Renvoie les points de la face sous forme objet
+    def adjacent_vertices_obj(self):
+        vertex_a = Vertex(self.halfedge.vertex.x,self.halfedge.vertex.y,
+                          self.halfedge.vertex.z,self.halfedge.vertex.index,
+                          self.halfedge)
+        vertex_b = Vertex(self.halfedge.next.vertex.x,self.halfedge.next.vertex.y,
+                          self.halfedge.next.vertex.z,self.halfedge.next.vertex.index,
+                          self.halfedge.next)
+        vertex_c = Vertex(self.halfedge.prev.vertex.x,self.halfedge.prev.vertex.y,
+                          self.halfedge.prev.vertex.z,self.halfedge.prev.vertex.index,
+                          self.halfedge.prev)
+        return [ vertex_a , vertex_b , vertex_c ]
+
 
     def get_normal(self):
         """Calculate the normal of facet
-
         Return a python list that contains the normal
         """
         vertex_a = [self.halfedge.vertex.x, self.halfedge.vertex.y,
@@ -351,6 +483,7 @@ class Facet:
 
         return normal
 
+#==========================================================================#
 
 class Halfedge:
 
@@ -358,7 +491,7 @@ class Halfedge:
                  facet=None, index=None):
         """Create a halfedge with given index.
         """
-        self.oppos(ite = opposite
+        self.opposite = opposite
         self.next = next
         self.prev = prev
         self.vertex = vertex
@@ -417,6 +550,7 @@ class Halfedge:
         else:
             return 0
 
+#==========================================================================#
 
 def allclose(v1, v2):
     """Compare if v1 and v2 are close
@@ -452,9 +586,7 @@ def make_iterable(obj):
 
 def dot(v1, v2):
     """Dot product(inner product) of v1 and v2
-
     v1, v2 - python list
-
     Return v1 dot v2
     """
     elementwise_multiply = list(map((lambda x, y: x * y), v1, v2))
