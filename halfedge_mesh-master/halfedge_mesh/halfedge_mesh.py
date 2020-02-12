@@ -300,7 +300,12 @@ class HalfedgeMesh:
 
         self.halfedges = hlist
 
-    # new 1.2 //
+    # new 1.3
+    def colorie(self,index_a):
+        liste_point = self.vertices
+        min = 0
+        max = 0
+        # voir tp3
 
 
 #==========================================================================#
@@ -320,7 +325,9 @@ class Vertex:
         self.x = x
         self.y = y
         self.z = z
-        self.couleurs = [0,0,0]
+        #
+        self.couleurs = [255,0,0]
+        #
         self.index = index
         #
         self.poids = 0
