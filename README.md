@@ -6,9 +6,9 @@
 
  Rapport de code :
 
-=> Les commantaires ne sont pas gérer
-=> Pas de couleur
-=> Espace non gérer
+- Les commantaires ne sont pas gérer
+- Pas de couleur
+- Espace non gérer
 
  class HalfedgeMesh
 
@@ -34,8 +34,8 @@
 
  Rapport de code :
 
-=> Ajout de l'aire d'une face triangulaire
-=> Ajout de l'aire d'un modele
+- Ajout de l'aire d'une face triangulaire
+- Ajout de l'aire d'un modele
 
 
  class Vertex
