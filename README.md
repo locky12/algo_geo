@@ -1,7 +1,7 @@
 #===============================================#
- Notepatch 1.1
- 29/01/2020
- François-Xavier Marcheix
+- Notepatch 1.1
+- 29/01/2020
+- François-Xavier Marcheix
 #===============================================#
 
  Rapport de code :
@@ -27,9 +27,9 @@
 		to do : renvoie sous forme obj
 #
 #===============================================#
- Notepatch 1.2
- 05/02/2020
- François-Xavier Marcheix
+- Notepatch 1.2
+- 05/02/2020
+- François-Xavier Marcheix
 #===============================================#
 
  Rapport de code :
@@ -68,9 +68,9 @@
 		// Soit il est sans bord
 #
 #===============================================#
- Notepatch 1.3
- 12/02/2020
- François-Xavier Marcheix
+- Notepatch 1.3
+- 12/02/2020
+- François-Xavier Marcheix
 #===============================================#
 
  class Facet
