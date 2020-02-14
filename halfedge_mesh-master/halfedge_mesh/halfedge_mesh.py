@@ -317,7 +317,7 @@ class Vertex:
         self.y = y
         self.z = z
         #
-        self.couleurs = [255,0,0]
+        self.couleurs = [0,0,0]
         #
         self.index = index
         #
@@ -325,7 +325,7 @@ class Vertex:
         self.drapeau = 0
         #
         self.halfedge = halfedge
-        self.marq = False
+        self.marq = 0
 
     def __eq__(x, y):
         return x.__key() == y.__key() and type(x) == type(y)
