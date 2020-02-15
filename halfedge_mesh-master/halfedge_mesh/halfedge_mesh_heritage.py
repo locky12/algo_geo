@@ -94,3 +94,44 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         for i in range(self.nb_composante):
             list.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
         return list
+
+    def calcule_genre (self, num_composante = 1) :
+        list = [[],[],[]]
+        print(list)
+        for halfedge in self.halfedges :
+            if(halfedge.vertex.marq == num_composante):
+                if (chercheListe(halfedge.index, list[0]) == False):
+                    list[0].append(halfedge)
+                if (chercheListe(halfedge.vertex.index, list[1]) == False):
+                    list[1].append(halfedge.vertex)
+                if (chercheListe(halfedge.facet.index, list[2]) == False):
+                    list[2].append(halfedge.facet)
+
+        print(len(list[0]), len(list[1]) ,len(list[2]))
+        print(list)
+        return list
+
+    def genre_composantes(self):
+        list = []
+        for i in range(self.nb_composante) :
+            list.append(self.calcule_genre(i+1))
+        print(list)
+        return list
+
+    def genre(self) :
+        lists = self.genre_composantes()
+        for list in lists :
+            print(g(list[0],list[1], list[2]))
+            print("genre de la CC ", 0, "est : " , g(list[0],list[1], list[2])  )
+
+def chercheListe (objet, list) :
+    for i in list :
+        print("compare",i.index, objet)
+        if ( i.index == objet):
+            print("true")
+            return True
+    return False
+
+def g (halfedge, vertices, facets):
+    x = len(vertices) - (len(halfedge)/2) + len(facets)
+    return (2-x)/2
