@@ -4,7 +4,11 @@
 import halfedge_mesh_heritage
 
 mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("tore.off")
-
+mesh.composante_connexes()
+mesh.colorie_composante_connexe()
+mesh.calcule_genre()
+mesh.genre()
+quit()
 
 #===================================================================#
 #   Fichier de test sur la classe halfedge_mesh_heritage
@@ -31,7 +35,7 @@ print("Test parcours")
 print("=============================")
 print("Test coloration")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/Tetris.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/tetris.off")
 
 mesh.colorie(0)
 

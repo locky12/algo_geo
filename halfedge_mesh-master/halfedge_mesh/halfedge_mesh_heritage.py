@@ -95,7 +95,6 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
             list.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
         return list
 
-<<<<<<< HEAD
     def calcule_genre (self, num_composante = 1) :
         list = [[],[],[]]
         print(list)
@@ -127,16 +126,15 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
 
 def chercheListe (objet, list) :
     for i in list :
-        print("compare",i.index, objet)
+        # print("compare",i.index, objet)
         if ( i.index == objet):
-            print("true")
+            # print("true")
             return True
     return False
 
 def g (halfedge, vertices, facets):
     x = len(vertices) - (len(halfedge)/2) + len(facets)
     return (2-x)/2
-=======
 
 
     # new 1.3
@@ -145,17 +143,17 @@ def g (halfedge, vertices, facets):
         if( index_a >= len(self.vertices) or index_a < 0 ):
             print(">>> Erreur : index non valide pour la coloration ")
             return -1
-        
+
         min_find = 0
         max_find = 0
-        
+
         # Parcour pour crée la distance au point
         self.vertices[index_a].descendre()
-        
+
         for i in self.vertices :
             if( max_find < i.poids ) :
                 max_find = i.poids
-                
+
         for i in self.vertices :
             i.couleurs[0] = int( 255 * (( i.poids - min_find ) / ( max_find - min_find )) )
             if( i.poids == 0 ):
@@ -163,4 +161,3 @@ def g (halfedge, vertices, facets):
                 i.couleurs[0] = 0
                 i.couleurs[1] = 0
                 i.couleurs[2] = 255
->>>>>>> 6b9564e924897b8ed8442e4963b8447715af054e
