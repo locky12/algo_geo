@@ -339,18 +339,16 @@ class Vertex:
     def get_vertex(self):
         return [self.x, self.y, self.z]
 
-    # new 1.2 // to do seulement 2 poid donnée pb
+    # new 1.2 //
     def Voisin(self):
-        edge_copy = self.halfedge
+
         edge = self.halfedge.opposite.next
-        edge2 = self.halfedge.next.next
         liste = []
-        liste.append( [ edge.vertex , self.distance(edge.vertex) ] )
-        liste.append( [ edge2.vertex , self.distance(edge2.vertex) ] )
-        while (edge != edge_copy) :
+        liste.append( [self.halfedge.opposite.vertex, self.distance(self.halfedge.opposite.vertex), self.halfedge.opposite.vertex.index ] )
+        while (edge != self.halfedge) :
+            if( edge != self.halfedge ) :
+                liste.append( [edge.vertex, self.distance(edge.vertex), edge.vertex.index ] )
             edge = edge.opposite.next
-            if( edge != edge_copy ) :
-                liste.append( [edge.vertex, self.distance(edge.vertex) ] )
         return liste
 
     # new 1.2
@@ -430,30 +428,34 @@ class Facet:
     # new : 1.1 // renvoie les index des points
     def adjacent_vertices(self):
         return [ self.a , self.b , self.c ]
-    # new : 1.1 //
+    
+    # new : 1.1 // Renvoie les half-edges
     def adjacent_halfedges(self):
-        g = self.halfedge
         li = []
-        li.append(g)
-        while g != self.halfedge.next :
-            li.append( self.halfedge )
-            self.halfedge = self.halfedge.next
+        li.append(self.halfedge.index)
+        g = self.halfedge.next
+        while g != self.halfedge :
+            li.append( g )
+            g = g.next
         return li
+    
     # new : 1.1 // Renvoie les index
     def adjacent_halfedges_index(self):
-        g = self.halfedge
         li = []
-        li.append(g.index)
-        while g != self.halfedge.next :
-            li.append( self.halfedge.index )
-            self.halfedge = self.halfedge.next
+        li.append(self.halfedge.index)
+        g = self.halfedge.next
+        while g != self.halfedge :
+            li.append( g.index )
+            g = g.next
         return li
+    
     # new : 1.2 // to do : structure de donnée problématique
     def aire_tri(self):
         liste_p = self.adjacent_vertices_obj()
         v1 = liste_p[0].produit_vectoriel(liste_p[1])
         v2 = liste_p[0].produit_vectoriel(liste_p[2])
         return 0.5*norm(dot(v1,v2) )
+    
     # new : 1.1 // Renvoie les points de la face sous forme objet
     def adjacent_vertices_obj(self):
         vertex_a = Vertex(self.halfedge.vertex.x,self.halfedge.vertex.y,
@@ -523,6 +525,58 @@ class Halfedge:
                 hash(self.vertex) ^ hash(self.facet) ^ hash(self.index) ^ \
                 hash((self.opposite, self.next, self.prev, self.vertex,
                     self.facet, self.index))
+
+    # Renvoie tout les half-edges de la face
+    def all_edges_of_facet(self):
+        liste = [ self ]
+        edges = self.next
+        while edges != self :
+            liste.append(edges)
+            edges = edges.next
+        return liste
+    
+    # Renvoie tout les points de la face
+    def all_vertex_of_facet(self):
+        liste = [ self.vertex ]
+        edges = self.next
+        while edges != self :
+            liste.append(edges.vertex)
+            edges = edges.next
+        return liste
+
+    # Renvoie les voisins
+    def all_voisin(self):
+        liste = [ self ]
+        g = self.opposite.next
+        while( g != self ) :
+            liste.append( g )
+            g = g.opposite.next
+        return liste
+    
+    # Renvoie les voisins par index
+    def all_voisin_index(self):
+        liste = [ self.index ]
+        g = self.opposite.next
+        while( g != self ) :
+            liste.append( g.index )
+            g = g.opposite.next
+        return liste
+    
+    # Renvoie les points de half-edges
+    def all_vertex_of_edges(self):
+        return [ self.vertex.index , self.opposite.vertex.index ]
+    
+    # Renvoie les voisins du point de départ par index
+    def all_vertex_voisin_of_edges(self):
+        liste = [ self.all_vertex_of_edges() ]
+        g = self.opposite.next
+        while( g != self ) :
+            liste.append( g.all_vertex_of_edges() )
+            g = g.opposite.next
+        return liste
+
+        
+    
 
     def get_angle_normal(self):
         """Calculate the angle between the normals that neighbor the edge.
