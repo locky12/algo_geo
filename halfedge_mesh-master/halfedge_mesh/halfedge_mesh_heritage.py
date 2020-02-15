@@ -97,7 +97,6 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
 
     def calcule_genre (self, num_composante = 1) :
         list = [[],[],[]]
-        print(list)
         for halfedge in self.halfedges :
             if(halfedge.vertex.marq == num_composante):
                 if (chercheListe(halfedge.index, list[0]) == False):
@@ -107,15 +106,12 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
                 if (chercheListe(halfedge.facet.index, list[2]) == False):
                     list[2].append(halfedge.facet)
 
-        print(len(list[0]), len(list[1]) ,len(list[2]))
-        print(list)
         return list
 
     def genre_composantes(self):
         list = []
         for i in range(self.nb_composante) :
             list.append(self.calcule_genre(i+1))
-        print(list)
         return list
 
     def genre(self) :
@@ -126,9 +122,7 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
 
 def chercheListe (objet, list) :
     for i in list :
-        # print("compare",i.index, objet)
         if ( i.index == objet):
-            # print("true")
             return True
     return False
 

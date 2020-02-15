@@ -3,7 +3,7 @@
 
 import halfedge_mesh_heritage
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("tore.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("bitore.off")
 mesh.composante_connexes()
 mesh.colorie_composante_connexe()
 mesh.calcule_genre()
