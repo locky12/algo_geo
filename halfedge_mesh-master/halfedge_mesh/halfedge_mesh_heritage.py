@@ -1,10 +1,11 @@
 import halfedge_mesh
+import random
 
 
 class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
-
     def __init__(self,arg):
         halfedge_mesh.HalfedgeMesh.__init__(self,arg)
+        self.nb_composante = 0
 
     def write_file(self, filename) :
         with open(filename, 'w') as file:
@@ -52,40 +53,44 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
             print(pile)
             print(r)
 
-    def parcours (self,vertex) :
+    def parcours (self,vertex,num_marq) :
         pile = []
-        vertex.marq = True
+        vertex.marq = num_marq
         pile.append(vertex)
         while (pile != []) :
             vertex = pile.pop(len(pile) -1)
             voisins = vertex.Voisin()
             for voisin in voisins :
-                if (voisin[0].marq == False) :
-                    voisin[0].marq = True
+                if (voisin[0].marq == 0) :
+                    voisin[0].marq = num_marq
                     pile.append(voisin[0])
+
     def verification_marq (self) :
         out = []
         for vertex in self.vertices :
-            if vertex.marq == False :
+            if vertex.marq == 0 :
                 out.append(vertex)
         return out
 
-            
+
     def composante_connexes (self) :
         vertices = self.verification_marq()
         nb_composante = 0
         while (vertices != []) :
-            self.parcours(vertices[0])
+            self.parcours(vertices[0],nb_composante + 1)
             vertices = self.verification_marq()
             nb_composante += 1
-
+        self.nb_composante = nb_composante
         print("nombe de composante_connexes : ", nb_composante)
 
+    def colorie_composante_connexe (self) :
+        couleurs = self.genere_x_couleur()
+        for vertex in self.vertices :
+            vertex.couleurs = couleurs[vertex.marq -1]
 
 
-
-
-
-# class VertexHerited (halfedge_mesh.Vertex) :
-#     def __init__() :
-#         halfedge_mesh.Vertex.__init__(self)
+    def genere_x_couleur (self) :
+        list = []
+        for i in range(self.nb_composante):
+            list.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
+        return list
