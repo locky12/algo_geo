@@ -35,7 +35,7 @@ print("Test parcours")
 print("=============================")
 print("Test coloration")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/cube2.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/ico.off")
 
 mesh.colorie(0)
 

@@ -291,13 +291,6 @@ class HalfedgeMesh:
 
         self.halfedges = hlist
 
-    # new 1.3
-    def colorie(self,index_a):
-        liste_point = self.vertices
-        min = 0
-        max = 0
-        # voir tp3
-
 
 #==========================================================================#
 
@@ -342,15 +335,7 @@ class Vertex:
 
     # new 1.2 //
     def Voisin(self):
-
-        edge = self.halfedge.opposite.next
-        liste = []
-        liste.append( [self.halfedge.opposite.vertex, self.distance(self.halfedge.opposite.vertex), self.halfedge.opposite.vertex.index ] )
-        while (edge != self.halfedge) :
-            if( edge != self.halfedge ) :
-                liste.append( [edge.vertex, self.distance(edge.vertex), edge.vertex.index ] )
-            edge = edge.opposite.next
-        return liste
+        return self.halfedge.all_edges_voisin_of_vertex()
 
     # new 1.2
     def init_Dijkstra(self):
@@ -567,13 +552,13 @@ class Halfedge:
     def all_vertex_of_edges(self):
         return [ self.vertex.index , self.opposite.vertex.index ]
 
-    # Renvoie les voisins du point de départ par index
-    def all_vertex_voisin_of_edges(self):
-        liste = [ self.all_vertex_of_edges() ]
-        g = self.opposite.next
+    # Renvoie les voisins et leur distance du point de départ
+    def all_edges_voisin_of_vertex(self):
+        liste = [ [ self.opposite.vertex , self.vertex.distance(self.opposite.vertex) , self.opposite.vertex.index ] ]
+        g = self.opposite.prev
         while( g != self ) :
-            liste.append( g.all_vertex_of_edges() )
-            g = g.opposite.next
+            liste.append( [ g.opposite.vertex , self.vertex.distance(g.opposite.vertex) , g.opposite.vertex.index ] )
+            g = g.opposite.prev
         return liste
 
 
