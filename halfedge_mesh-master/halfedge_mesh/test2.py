@@ -8,7 +8,7 @@ mesh.composante_connexes()
 mesh.colorie_composante_connexe()
 mesh.calcule_genre()
 mesh.genre()
-# quit()
+
 
 #===================================================================#
 #   Fichier de test sur la classe halfedge_mesh_heritage
@@ -24,11 +24,10 @@ print("=============================")
 print("Test parcours")
 
 
-# mesh.parcours_largeur()
-
-# mesh.parcours(mesh.vertices[0])
-
-# # mesh.write_file("cubeColor2.off")
+mesh.parcours_largeur()
+mesh.parcours(mesh.vertices[0])
+mesh.colorie_composante_connexe()
+mesh.write_file("model_off/bonhommeColorieComposante.off")
 
 # print(mesh.verification_marq())
 
@@ -36,26 +35,21 @@ print("=============================")
 print("Test coloration")
 
 mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/ico.off")
-
 mesh.colorie(0)
-
 # Sauvegarde du fichier
 mesh.write_file("model_off/Retour_coloration.off")
 
 print("=============================")
 print("Test composante connexes")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/bonhomme.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/CC_genre.off")
 
 mesh.composante_connexes()
-
-
 mesh.calcule_genre()
 mesh.colorie_genre()
-# mesh.genre()
-mesh.write_file("model_off/bonhommeColorie.off")
+mesh.write_file("model_off/CC_genre_colorie.off")
 
 
-mesh.write_file("model_off/bonhommeColorie.off")
+# mesh.write_file("model_off/bonhommeColorie.off")
 
 print("=============================")

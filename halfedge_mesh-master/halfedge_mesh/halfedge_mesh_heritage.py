@@ -5,7 +5,7 @@ import random
 class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
     def __init__(self,arg):
         halfedge_mesh.HalfedgeMesh.__init__(self,arg)
-        self.nb_composante = 0
+        self.nb_composante = 1
 
     def write_file(self, filename) :
         with open(filename, 'w') as file:
@@ -53,7 +53,7 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
             print(pile)
             print(r)
 
-    def parcours (self,vertex,num_marq) :
+    def parcours (self,vertex,num_marq =  1) :
         pile = []
         vertex.marq = num_marq
         pile.append(vertex)
@@ -84,16 +84,15 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         print("nombe de composante_connexes : ", nb_composante)
 
     def colorie_composante_connexe (self) :
-        couleurs = self.genere_x_couleur()
+        print("debut coloraige")
+        couleurs = genere_x_couleur(self.nb_composante)
         for vertex in self.vertices :
-            vertex.couleurs = couleurs[vertex.marq -1]
+            print(vertex.marq, self.nb_composante)
+            print(couleurs)
+            vertex.couleurs = couleurs[vertex.marq - 1]
 
 
-    def genere_x_couleur (self) :
-        list = []
-        for i in range(self.nb_composante):
-            list.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
-        return list
+
 
     def calcule_genre (self, num_composante = 1) :
         list = [[],[],[]]
@@ -116,17 +115,26 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
 
     def genre(self) :
         lists = self.genre_composantes()
+        list_genre = []
         for list in lists :
-            print(g(list[0],list[1], list[2]))
+            list_genre.append(int(g(list[0],list[1], list[2])))
             print("genre de la CC ", 0, "est : " , g(list[0],list[1], list[2])  )
+        return lists, list_genre
 
     def colorie_genre(self) :
-        couleurs = self.genere_x_couleur()
-        lists = self.genre_composantes()
-        for list in lists :
-            for vertex in list[2]:
-                vertex.couleurs = couleurs[int(g(list[0],list[1], list[2]))]
-            print("genre de la CC ", 0, "est : " , g(list[0],list[1], list[2])  )
+        listes_compososantes, liste_genre = self.genre()
+        couleurs = genere_x_couleur(max(liste_genre) + 1)
+        list_vertices = []
+        for composante, genre in zip(listes_compososantes, liste_genre) :
+            for vertex in composante[1]:
+                print(genre, couleurs[genre] )
+                vertex.couleurs = couleurs[genre]
+                # list_vertices.append(vertex)
+
+            print("genre de la CC ", 0, "est : " , genre  )
+        # self.vertices = list_vertices
+        for i in self.vertices :
+            print(i.couleurs)
 
 
 
@@ -166,3 +174,10 @@ def chercheListe (objet, list) :
 def g (halfedge, vertices, facets):
     x = len(vertices) - (len(halfedge)/2) + len(facets)
     return (2-x)/2
+
+def genere_x_couleur (nb) :
+    print(nb)
+    list = []
+    for i in range(nb):
+        list.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
+    return list
