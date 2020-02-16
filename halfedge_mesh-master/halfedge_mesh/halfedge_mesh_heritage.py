@@ -120,15 +120,15 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
             print(g(list[0],list[1], list[2]))
             print("genre de la CC ", 0, "est : " , g(list[0],list[1], list[2])  )
 
-def chercheListe (objet, list) :
-    for i in list :
-        if ( i.index == objet):
-            return True
-    return False
+    def colorie_genre(self) :
+        couleurs = self.genere_x_couleur()
+        lists = self.genre_composantes()
+        for list in lists :
+            for vertex in list[2]:
+                vertex.couleurs = couleurs[int(g(list[0],list[1], list[2]))]
+            print("genre de la CC ", 0, "est : " , g(list[0],list[1], list[2])  )
 
-def g (halfedge, vertices, facets):
-    x = len(vertices) - (len(halfedge)/2) + len(facets)
-    return (2-x)/2
+
 
 
     # new 1.3
@@ -155,3 +155,14 @@ def g (halfedge, vertices, facets):
                 i.couleurs[0] = 0
                 i.couleurs[1] = 0
                 i.couleurs[2] = 255
+
+
+def chercheListe (objet, list) :
+    for i in list :
+        if ( i.index == objet):
+            return True
+    return False
+
+def g (halfedge, vertices, facets):
+    x = len(vertices) - (len(halfedge)/2) + len(facets)
+    return (2-x)/2

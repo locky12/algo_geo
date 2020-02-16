@@ -326,6 +326,7 @@ class Vertex:
         #
         self.halfedge = halfedge
         self.marq = 0
+        self.genre = -1
 
     def __eq__(x, y):
         return x.__key() == y.__key() and type(x) == type(y)
@@ -428,7 +429,7 @@ class Facet:
     # new : 1.1 // renvoie les index des points
     def adjacent_vertices(self):
         return [ self.a , self.b , self.c ]
-    
+
     # new : 1.1 // Renvoie les half-edges
     def adjacent_halfedges(self):
         li = []
@@ -438,7 +439,7 @@ class Facet:
             li.append( g )
             g = g.next
         return li
-    
+
     # new : 1.1 // Renvoie les index
     def adjacent_halfedges_index(self):
         li = []
@@ -448,14 +449,14 @@ class Facet:
             li.append( g.index )
             g = g.next
         return li
-    
+
     # new : 1.2 // to do : structure de donnée problématique
     def aire_tri(self):
         liste_p = self.adjacent_vertices_obj()
         v1 = liste_p[0].produit_vectoriel(liste_p[1])
         v2 = liste_p[0].produit_vectoriel(liste_p[2])
         return 0.5*norm(dot(v1,v2) )
-    
+
     # new : 1.1 // Renvoie les points de la face sous forme objet
     def adjacent_vertices_obj(self):
         vertex_a = Vertex(self.halfedge.vertex.x,self.halfedge.vertex.y,
@@ -534,7 +535,7 @@ class Halfedge:
             liste.append(edges)
             edges = edges.next
         return liste
-    
+
     # Renvoie tout les points de la face
     def all_vertex_of_facet(self):
         liste = [ self.vertex ]
@@ -552,7 +553,7 @@ class Halfedge:
             liste.append( g )
             g = g.opposite.next
         return liste
-    
+
     # Renvoie les voisins par index
     def all_voisin_index(self):
         liste = [ self.index ]
@@ -561,11 +562,11 @@ class Halfedge:
             liste.append( g.index )
             g = g.opposite.next
         return liste
-    
+
     # Renvoie les points de half-edges
     def all_vertex_of_edges(self):
         return [ self.vertex.index , self.opposite.vertex.index ]
-    
+
     # Renvoie les voisins du point de départ par index
     def all_vertex_voisin_of_edges(self):
         liste = [ self.all_vertex_of_edges() ]
@@ -575,8 +576,8 @@ class Halfedge:
             g = g.opposite.next
         return liste
 
-        
-    
+
+
 
     def get_angle_normal(self):
         """Calculate the angle between the normals that neighbor the edge.

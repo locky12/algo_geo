@@ -3,12 +3,12 @@
 
 import halfedge_mesh_heritage
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("bitore.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/bitore.off")
 mesh.composante_connexes()
 mesh.colorie_composante_connexe()
 mesh.calcule_genre()
 mesh.genre()
-quit()
+# quit()
 
 #===================================================================#
 #   Fichier de test sur la classe halfedge_mesh_heritage
@@ -17,7 +17,7 @@ quit()
 #===================================================================#
 
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/bonhomme.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/cube2.off")
 
 
 print("=============================")
@@ -35,7 +35,7 @@ print("Test parcours")
 print("=============================")
 print("Test coloration")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/tetris.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/cube2.off")
 
 mesh.colorie(0)
 
@@ -49,11 +49,11 @@ mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/bonhomme.off")
 
 mesh.composante_connexes()
 
-mesh.colorie_composante_connexe()
 
-# mesh.calcule_genre()
+mesh.calcule_genre()
+mesh.colorie_genre()
 # mesh.genre()
-mesh.write_file("bonhommeColorie.off")
+mesh.write_file("model_off/bonhommeColorie.off")
 
 
 mesh.write_file("model_off/bonhommeColorie.off")
