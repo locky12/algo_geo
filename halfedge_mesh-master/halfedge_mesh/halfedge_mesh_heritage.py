@@ -18,40 +18,6 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
                 file.write("3" + "  " +str(facet.a) + " " + str(facet.b) + " " + str(facet.c)+" "+ str(facet.couleurs[0]) + " " + str(facet.couleurs[1]) + " " + str(facet.couleurs[2]) +"\n")
 
 
-    def parcours_largeur (self) :
-        vertex = self.vertices[0]
-        pile = []
-        pile.append(vertex)
-        vertex.marq = True
-        while pile != [] :
-            if(vertex in pile):
-                pile.remove(vertex)
-            print("en cours de traitement : ", vertex.index)
-
-            voisin = vertex.halfedge.next.vertex
-            # if (voisin.marq == False) :
-            vertex = voisin
-            print("voisin1 : ", voisin.index)
-
-            while voisin.marq == False :
-                print("voisin : ", voisin.index)
-                pile.append(voisin)
-                voisin.marq = True
-                voisin = voisin.halfedge.next.vertex
-        for i in self.vertices :
-            if(i.marq == True) :
-                print("True : ",i.index)
-            else :
-                print("False : ",i.index)
-
-    def test (self) :
-            pile = []
-            pile.append("A")
-            pile.append("B")
-            pile.append("C")
-            r = pile.pop(len(pile)-1)
-            print(pile)
-            print(r)
 
     def parcours (self,vertex,num_marq =  1) :
         pile = []
@@ -84,14 +50,22 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         print("nombe de composante_connexes : ", nb_composante)
 
     def colorie_composante_connexe (self) :
-        print("debut coloraige")
         couleurs = genere_x_couleur(self.nb_composante)
         for vertex in self.vertices :
-            print(vertex.marq, self.nb_composante)
-            print(couleurs)
             vertex.couleurs = couleurs[vertex.marq - 1]
 
 
+
+    def vertex_all_composante(self) :
+        list_vertex = []
+        index = 1
+        for vertex in self.vertices :
+            if (vertex.marq == index ) :
+                list_vertex.append(vertex)
+                index += 1
+            if(index == self.nb_composante +1):
+                return list_vertex
+        return list_vertex
 
 
     def calcule_genre (self, num_composante = 1) :
@@ -127,42 +101,63 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         list_vertices = []
         for composante, genre in zip(listes_compososantes, liste_genre) :
             for vertex in composante[1]:
-                print(genre, couleurs[genre] )
                 vertex.couleurs = couleurs[genre]
                 # list_vertices.append(vertex)
 
             print("genre de la CC ", 0, "est : " , genre  )
         # self.vertices = list_vertices
-        for i in self.vertices :
-            print(i.couleurs)
-
-
-
 
     # new 1.3
-    def colorie(self,index_a):
 
-        if( index_a >= len(self.vertices) or index_a < 0 ):
-            print(">>> Erreur : index non valide pour la coloration ")
-            return -1
+    def colorie_distance_coposantes (self) :
+        vertices = self.vertex_all_composante()
+        for index,vertex in enumerate(vertices) :
+            self.colorie_bis(vertex,index+1)
 
-        min_find = 0
-        max_find = 0
+    # def colorie(self,index_a):
+    #
+    #     if( index_a >= len(self.vertices) or index_a < 0 ):
+    #         print(">>> Erreur : index non valide pour la coloration ")
+    #         return -1
+    #
+    #     min_find = 0
+    #     max_find = 0
+    #
+    #     # Parcour pour crée la distance au point
+    #     self.vertices[index_a].descendre()
+    #
+    #     for i in self.vertices :
+    #         if( max_find < i.poids ) :
+    #             max_find = i.poids
+    #
+    #     for i in self.vertices :
+    #         print(i.poids, "poi")
+    #         i.couleurs[0] = int( 255 * (( i.poids - min_find ) / ( max_find - min_find )) )
+    #         if( i.poids == 0 ):
+    #             # Le point de départ visible en bleu
+    #             i.couleurs[0] = 0
+    #             i.couleurs[1] = 0
+    #             i.couleurs[2] = 255
 
-        # Parcour pour crée la distance au point
-        self.vertices[index_a].descendre()
+    def colorie_bis (self, vertex, index_composante_connexe = 0) :
+            min_find = 0
+            max_find = 0
 
-        for i in self.vertices :
-            if( max_find < i.poids ) :
-                max_find = i.poids
+                # Parcour pour crée la distance au point
+            vertex.descendre()
 
-        for i in self.vertices :
-            i.couleurs[0] = int( 255 * (( i.poids - min_find ) / ( max_find - min_find )) )
-            if( i.poids == 0 ):
-                # Le point de départ visible en bleu
-                i.couleurs[0] = 0
-                i.couleurs[1] = 0
-                i.couleurs[2] = 255
+            for i in self.vertices :
+                if( max_find < i.poids ) :
+                    max_find = i.poids
+
+            for i in self.vertices :
+                if(i.marq == index_composante_connexe) :
+                    i.couleurs[0] = int( 255 * (( i.poids - min_find ) / ( max_find - min_find )) )
+                    if( i.poids == 0 ):
+                        # Le point de départ visible en bleu
+                        i.couleurs[0] = 0
+                        i.couleurs[1] = 0
+                        i.couleurs[2] = 255
 
 
 def chercheListe (objet, list) :

@@ -24,7 +24,7 @@ print("=============================")
 print("Test parcours")
 
 
-mesh.parcours_largeur()
+# mesh.parcours_largeur()
 mesh.parcours(mesh.vertices[0])
 mesh.colorie_composante_connexe()
 mesh.write_file("model_off/bonhommeColorieComposante.off")
@@ -34,19 +34,25 @@ mesh.write_file("model_off/bonhommeColorieComposante.off")
 print("=============================")
 print("Test coloration")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/ico.off")
-mesh.colorie(0)
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/tritore.off")
+# mesh.colorie_bis(mesh.vertices[0])
+mesh.colorie_distance_coposantes()
+# quit()
 # Sauvegarde du fichier
 mesh.write_file("model_off/Retour_coloration.off")
+print('ok')
+
 
 print("=============================")
 print("Test composante connexes")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/CC_genre.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/bonhomme.off")
 
 mesh.composante_connexes()
-mesh.calcule_genre()
-mesh.colorie_genre()
+# mesh.calcule_genre()
+# mesh.colorie_genre()
+mesh.colorie_distance_coposantes()
+
 mesh.write_file("model_off/CC_genre_colorie.off")
 
 
