@@ -107,7 +107,7 @@ class HalfedgeMesh:
         while index != number_vertices :
 
             line = file_object.readline().split()
-            print(line)
+            # print(line)
             # Prise en compte des commentaires
             if line[0][0] == "#" :
                 continue
@@ -337,11 +337,11 @@ class Vertex:
     def coord(self):
         return [ self.x , self.y , self.z ]
 
-    # 
+    #
     def Voisin(self):
         return self.halfedge.all_edges_voisin_of_vertex()
 
-    # 
+    #
     def init_Dijkstra(self):
         self.drapeau = 0
         self.poids = 0
@@ -378,7 +378,7 @@ class Vertex:
         c = self.x*other.y - self.y*other.x
         return [a,b,c]
 
-    # 
+    #
     def new_couleurs( tab_rvb ):
         self.couleurs = tab_rvb
 
@@ -703,6 +703,5 @@ def SignedVolumeOfTriangle( v1 , v2 , v3):
     v123 = v1[0]*v2[1]*v3[2];
     return (1/6)*(-v321 + v231 + v312 - v132 - v213 + v123)
 
-
-
-
+def distance(vertex,other):
+    return (pow((vertex.x - other.x),2) + pow((vertex.y - other.y),2) + pow((vertex.z - other.z),2))

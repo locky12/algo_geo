@@ -9,7 +9,7 @@ import halfedge_mesh_heritage
 #   github  :   https://github.com/locky12/algo_geo.git
 #===================================================================#
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/cube2.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/cubes.off")
 
 
 print("=============================")
@@ -26,37 +26,41 @@ mesh.write_file("model_off/bonhommeColorieComposante.off")
 print("=============================")
 print("Test coloration")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/tetris.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/ico.off")
 # mesh.colorie_bis(mesh.vertices[0])
-mesh.colorie_distance_coposantes()
-print("volume = ", mesh.Volume_mesh() )
+# mesh.composante_connexes()
+# mesh.colorie_distance_coposantes()
+# for i in mesh.vertices :
+#     print(i.poids)
 # quit()
-# Sauvegarde du fichier
+print("diametre estimation = ", mesh.estimation_diametre())
+print("volume = ", mesh.Volume_mesh() )
+quit()# Sauvegarde du fichier
 mesh.write_file("model_off/Retour_coloration.off")
 print('ok')
-
+# quit()
 
 print("=============================")
 print("Test composante connexes")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/bonhomme.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/CC_genre.off")
 
 mesh.composante_connexes()
-# mesh.calcule_genre()
-# mesh.colorie_genre()
-mesh.colorie_distance_coposantes()
+mesh.calcule_genre()
+mesh.colorie_genre()
+# mesh.colorie_distance_coposantes()
 
 mesh.write_file("model_off/CC_genre_colorie.off")
 
 
 # mesh.write_file("model_off/bonhommeColorie.off")
-
-print("=============================")
-print("Test genre")
-
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/bitore.off")
-mesh.composante_connexes()
-mesh.colorie_composante_connexe()
-mesh.calcule_genre()
-mesh.genre()
-
+#
+# print("=============================")
+# print("Test genre")
+#
+# mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/CC_genre.off")
+# mesh.composante_connexes()
+# mesh.colorie_composante_connexe()
+# mesh.write_file("model_off/composante_colorie.off")
+# mesh.calcule_genre()
+# mesh.genre()

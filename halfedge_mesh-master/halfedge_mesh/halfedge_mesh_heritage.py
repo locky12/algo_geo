@@ -60,6 +60,7 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         list_vertex = []
         index = 1
         for vertex in self.vertices :
+            # quit()
             if (vertex.marq == index ) :
                 list_vertex.append(vertex)
                 index += 1
@@ -114,36 +115,33 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         for index,vertex in enumerate(vertices) :
             self.colorie_bis(vertex,index+1)
 
-    # def colorie(self,index_a):
-    #
-    #     if( index_a >= len(self.vertices) or index_a < 0 ):
-    #         print(">>> Erreur : index non valide pour la coloration ")
-    #         return -1
-    #
-    #     min_find = 0
-    #     max_find = 0
-    #
-    #     # Parcour pour crée la distance au point
-    #     self.vertices[index_a].descendre()
-    #
-    #     for i in self.vertices :
-    #         if( max_find < i.poids ) :
-    #             max_find = i.poids
-    #
-    #     for i in self.vertices :
-    #         print(i.poids, "poi")
-    #         i.couleurs[0] = int( 255 * (( i.poids - min_find ) / ( max_find - min_find )) )
-    #         if( i.poids == 0 ):
-    #             # Le point de départ visible en bleu
-    #             i.couleurs[0] = 0
-    #             i.couleurs[1] = 0
-    #             i.couleurs[2] = 255
+
+    def estimation_diametre(self) :
+        list_poids = []
+        self.vertices[0].descendre()
+        s1 = self.vertices[0]
+        for vertex in self.vertices :
+            list_poids.append(vertex.poids)
+            vertex.init_Dijkstra()
+
+        maxi = max(list_poids)
+        s2 = self.vertices[list_poids.index(maxi)]
+        list_poids = []
+        s2.descendre()
+        for vertex in self.vertices :
+            list_poids.append(vertex.poids)
+            vertex.init_Dijkstra()
+        maxi = max(list_poids)
+        s3 = self.vertices[list_poids.index(maxi)]
+
+        return halfedge_mesh.distance(s2,s3)
+
 
     def colorie_bis (self, vertex, index_composante_connexe = 0) :
             min_find = 0
             max_find = 0
 
-                # Parcour pour crée la distance au point
+            # Parcour pour crée la distance au point
             vertex.descendre()
 
             for i in self.vertices :
@@ -178,7 +176,8 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
 
         return ([[min(list_x), max(list_x)],[min(list_y), max(list_y)],[min(list_z), max(list_z)]])
 
-        
+
+
 def chercheListe (objet, list) :
     for i in list :
         if ( i.index == objet):
@@ -190,7 +189,6 @@ def g (halfedge, vertices, facets):
     return (2-x)/2
 
 def genere_x_couleur (nb) :
-    print(nb)
     list = []
     for i in range(nb):
         list.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
