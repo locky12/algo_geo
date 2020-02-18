@@ -160,6 +160,18 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
                         i.couleurs[2] = 255
 
 
+    def min_max_xyz() :
+        list_x = []
+        list_y = []
+        list_z = []
+        for vertex in self.vertices :
+            list_x.append(vertex.x)
+            list_x.append(vertex.y)
+            list_x.append(vertex.z)
+
+        return ([[min(list_x), max(list_x)],[min(list_y), max(list_y)],[min(list_z), max(list_z)]])
+
+        
 def chercheListe (objet, list) :
     for i in list :
         if ( i.index == objet):
