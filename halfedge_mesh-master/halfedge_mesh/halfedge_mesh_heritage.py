@@ -159,6 +159,13 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
                         i.couleurs[1] = 0
                         i.couleurs[2] = 255
 
+    #Renvoie le volume de l'objet
+    def Volume_mesh(self):
+        res = []
+        for t in self.facets :
+            res.append( t.SignedVol() )
+        return abs( sum(res) )
+
 
 def chercheListe (objet, list) :
     for i in list :
