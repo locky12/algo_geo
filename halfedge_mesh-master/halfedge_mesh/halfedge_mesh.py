@@ -333,16 +333,20 @@ class Vertex:
     def get_vertex(self):
         return [self.x, self.y, self.z]
 
-    # new 1.2 //
+    # new
+    def coord(self):
+        return [ self.x , self.y , self.z ]
+
+    # 
     def Voisin(self):
         return self.halfedge.all_edges_voisin_of_vertex()
 
-    # new 1.2
+    # 
     def init_Dijkstra(self):
         self.drapeau = 0
         self.poids = 0
 
-    # new 1.2 // Fait un Dijkstra sur les voisins du point actuel
+    # Fait un Dijkstra sur les voisins du point actuel
     def descendre(self):
         liste_voisin = self.Voisin()
         #Optimisation : on prend la plus petit distance en premier
@@ -363,18 +367,18 @@ class Vertex:
                 index[0].descendre()
         return 0
 
-    # new 1.2 Renvoie la distance entre 2 points
+    # Renvoie la distance entre 2 points
     def distance(self,other):
         return (pow((self.x - other.x),2) + pow((self.y - other.y),2) + pow((self.z - other.z),2))
 
-    # new 1.2 Fait le produit vectoriel entre 2 points
+    # Fait le produit vectoriel entre 2 points
     def produit_vectoriel(self,other):
         a = self.y*other.z - self.z*other.y
         b = self.z*other.x - self.x*other.z
         c = self.x*other.y - self.y*other.x
         return [a,b,c]
 
-    # new 1.3
+    # 
     def new_couleurs( tab_rvb ):
         self.couleurs = tab_rvb
 
@@ -454,6 +458,10 @@ class Facet:
                           self.halfedge.prev.vertex.z,self.halfedge.prev.vertex.index,
                           self.halfedge.prev)
         return [ vertex_a , vertex_b , vertex_c ]
+
+    def SignedVol(self):
+        V = self.adjacent_vertices_obj()
+        return SignedVolumeOfTriangle( V[0].coord() , V[1].coord() , V[2].coord() )
 
 
     def get_normal(self):
@@ -685,3 +693,16 @@ def create_vector(p1, p2):
     Return a list [x,y,z] for the coordinates of vector
     """
     return list(map((lambda x,y: x-y), p2, p1))
+
+def SignedVolumeOfTriangle( v1 , v2 , v3):
+    v321 = v3[0]*v2[1]*v1[2];
+    v231 = v2[0]*v3[1]*v1[2];
+    v312 = v3[0]*v1[1]*v2[2];
+    v132 = v1[0]*v3[1]*v2[2];
+    v213 = v2[0]*v1[1]*v3[2];
+    v123 = v1[0]*v2[1]*v3[2];
+    return (1/6)*(-v321 + v231 + v312 - v132 - v213 + v123)
+
+
+
+

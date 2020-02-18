@@ -43,7 +43,13 @@ for i in test_v :
 print("=============================")
 print("test Halfedge")
 
+
+print(mesh.facets[1].halfedge.all_vertex_of_facet())
+
 print( mesh.vertices[0].halfedge.vertex.index )
 print( mesh.vertices[0].halfedge.all_edges_voisin_of_vertex() )
 for i in mesh.halfedges :
     continue
+
+
+print("=============================")
