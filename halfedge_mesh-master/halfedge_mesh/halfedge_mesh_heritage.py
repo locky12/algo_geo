@@ -1,8 +1,14 @@
 import halfedge_mesh
 import random
 
+#===============================================================================#
+# Fichier de la classe HalfedgeMeshHerited
+# Date : 19/02/2020
+# 
+#===============================================================================#
 
 class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
+    
     def __init__(self,arg):
         halfedge_mesh.HalfedgeMesh.__init__(self,arg)
         self.nb_composante = 1
@@ -118,8 +124,9 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
 
     def estimation_diametre(self) :
         list_poids = []
-        self.vertices[0].descendre()
-        s1 = self.vertices[0]
+        ind_s1 = random.randint( 0 , len( self.vertices ) - 1 )
+        self.vertices[ind_s1].descendre()
+        s1 = self.vertices[ind_s1]
         for vertex in self.vertices :
             list_poids.append(vertex.poids)
             vertex.init_Dijkstra()
@@ -177,6 +184,83 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         return ([[min(list_x), max(list_x)],[min(list_y), max(list_y)],[min(list_z), max(list_z)]])
 
 
+    #____________________________________________________________#
+    #
+    #   Partie : Segmentation
+    #____________________________________________________________#
+
+    # Coloration des faces du maillage
+    def start_segmentation(self):
+        print( self.facets[0].halfedge.adjacente_face() )
+        print("")
+        liste_p = []
+        for i in self.facets :
+            liste_p.append( i.perimetre() )
+        moy = moyenne(liste_p)
+        for i in range(len(self.facets)):
+            if( liste_p[i] <= moy ) :
+                self.facets[i].categorie = 1
+                self.facets[i].give_couleur([250,0,0])
+            else :
+                self.facets[i].categorie = 2
+                self.facets[i].give_couleur([0,0,250])
+        return moy
+
+    #
+    def parcours_face (self,face_i,num_marq =  1) :
+        pile = []
+        face_i.marq = num_marq
+        face_cat = face_i.categorie
+        pile.append(face_i)
+        while (pile != []) :
+            face_i = pile.pop(len(pile) -1)
+            voisins = face_i.halfedge.adjacente_face()
+            for voisin in voisins :
+                if (voisin.marq == 0 and voisin.categorie == face_cat) :
+                    voisin.marq = num_marq
+                    pile.append(voisin)
+
+    def verification_marq_face (self) :
+        out = []
+        for f in self.facets :
+            if f.marq == 0 :
+                out.append(f)
+        return out
+
+    def composante_connexes_face (self) :
+        faces = self.verification_marq_face()
+        nb_composante = 0
+        while (faces != []) :
+            self.parcours_face(faces[0],nb_composante + 1)
+            faces = self.verification_marq_face()
+            nb_composante += 1
+        self.nb_composante = nb_composante
+        print("nombe de composante_connexes : ", nb_composante)
+
+    def colorie_composante_connexe_face (self) :
+        couleurs = genere_x_couleur(self.nb_composante)
+        for f in self.facets :
+            f.couleurs = couleurs[f.marq - 1]
+
+
+#
+def Otsu( liste_p , n ):
+
+    maxi = max(liste_p)
+    taille = maxi/n
+    tab = []
+    for j in range(n) :
+        tab.append( [] )
+        for i in liste_p :
+            #print("ici",maxi/(j+1),maxi/(j+2),i," m = ",maxi)
+            if( i <= taille*i and i > taille*(i+1) ):
+                #print("oui")
+                tab[j].append( i )
+    return tab
+
+                
+#===============================================================================#
+# Fonction externe #
 
 def chercheListe (objet, list) :
     for i in list :
@@ -193,3 +277,6 @@ def genere_x_couleur (nb) :
     for i in range(nb):
         list.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
     return list
+
+def moyenne(liste):
+    return sum(liste)/len(liste)

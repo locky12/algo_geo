@@ -400,11 +400,14 @@ class Facet:
         self.c = c
         self.index = index
         # halfedge going ccw around this facet.
-        self.couleurs = [0,0,0]
         self.halfedge = halfedge
 
         # couleur
         self.couleurs = [ 0 , 0 , 0 ]
+
+        # 
+        self.categorie = 0
+        self.marq = 0
 
     def __eq__(self, other):
         return self.a == other.a and self.b == other.b and self.c == other.c \
@@ -459,6 +462,16 @@ class Facet:
                           self.halfedge.prev)
         return [ vertex_a , vertex_b , vertex_c ]
 
+    # 
+    def perimetre(self):
+        V = self.adjacent_vertices_obj()
+        return ( V[0].distance(V[1]) + V[0].distance(V[2]) + V[1].distance(V[2]) )
+
+    #
+    def give_couleur( self , t ):
+        self.couleurs = t
+
+    #
     def SignedVol(self):
         V = self.adjacent_vertices_obj()
         return SignedVolumeOfTriangle( V[0].coord() , V[1].coord() , V[2].coord() )
@@ -526,6 +539,15 @@ class Halfedge:
         edges = self.next
         while edges != self :
             liste.append(edges)
+            edges = edges.next
+        return liste
+
+    # Renvoie les faces adjacentes 
+    def adjacente_face(self):
+        liste = [ self.opposite.facet ]
+        edges = self.next
+        while edges != self :
+            liste.append(edges.opposite.facet )
             edges = edges.next
         return liste
 
