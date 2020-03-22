@@ -26,7 +26,7 @@ mesh.write_file("model_off/bonhommeColorieComposante.off")
 print("=============================")
 print("Test coloration")
 
-mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/tetris.off")
+mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/adapter.off")
 #print("diametre estimation = ", mesh.estimation_diametre())
 print("volume = ", mesh.Volume_mesh() )
 print("Moyenne coloration = ", mesh.start_segmentation() )

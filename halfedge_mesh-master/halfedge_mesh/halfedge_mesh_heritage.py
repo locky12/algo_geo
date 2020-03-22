@@ -1,5 +1,8 @@
 import halfedge_mesh
 import random
+# Nouveau lib disponnible
+import numpy as np
+from sklearn.cluster import KMeans
 
 #===============================================================================#
 # Fichier de la classe HalfedgeMeshHerited
@@ -242,8 +245,41 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         for f in self.facets :
             f.couleurs = couleurs[f.marq - 1]
 
+    #____________________________________________________________#
+    #
+    #   Partie : Segmentation par k-mean
+    #____________________________________________________________#
 
-#
+    def start_segmentation_k_mean(self):
+        liste_p = []
+        for i in self.facets :
+            liste_p.append( i.perimetre() )
+        centroids = test_learn(liste_p )        
+        for i in range(len(self.facets)):
+            for j in range(len(centroids)) :
+                print( liste_p[i] , centroids[j][0] , centroids[j][1] )
+                if (liste_p[i] <= centroids[j][0]) and (liste_p[i] >= centroids[j][1]) :
+                    self.facets[i].categorie = j
+        return len(centroids)
+
+# Cette méthode utlise le k-mean
+
+def test_learn( liste_p ):
+    X = np.array(list(zip(liste_p,liste_p)))
+    # Number of clusters
+    kmeans = KMeans(n_clusters=3)
+    # Fitting the input data
+    kmeans = kmeans.fit(X)
+    # Getting the cluster labels
+    labels = kmeans.predict(X)
+    # Centroid values
+    centroids = kmeans.cluster_centers_
+    # Comparing with scikit-learn centroids
+    print(centroids) # From sci-kit learn
+    return centroids
+
+# Méthode D'Otsu
+
 def Otsu( liste_p , n ):
 
     maxi = max(liste_p)
