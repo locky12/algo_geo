@@ -7,11 +7,11 @@ from sklearn.cluster import KMeans
 #===============================================================================#
 # Fichier de la classe HalfedgeMeshHerited
 # Date : 19/02/2020
-# 
+#
 #===============================================================================#
 
 class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
-    
+
     def __init__(self,arg):
         halfedge_mesh.HalfedgeMesh.__init__(self,arg)
         self.nb_composante = 1
@@ -245,38 +245,65 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
         for f in self.facets :
             f.couleurs = couleurs[f.marq - 1]
 
+    def colorie_categorie (self,k) :
+        couleurs = genere_x_couleur(k)
+        for f in self.facets :
+            print(couleurs)
+            print("f : ",f.categorie)
+            f.couleurs = couleurs[f.categorie]
     #____________________________________________________________#
     #
     #   Partie : Segmentation par k-mean
     #____________________________________________________________#
 
-    def start_segmentation_k_mean(self):
-        liste_p = []
-        for i in self.facets :
-            liste_p.append( i.perimetre() )
-        centroids = test_learn(liste_p )        
-        for i in range(len(self.facets)):
-            for j in range(len(centroids)) :
-                print( liste_p[i] , centroids[j][0] , centroids[j][1] )
-                if (liste_p[i] <= centroids[j][0]) and (liste_p[i] >= centroids[j][1]) :
-                    self.facets[i].categorie = j
-        return len(centroids)
+
+
+# Pas utile
+    # def start_segmentation_k_mean(self):
+    #     liste_p = []
+    #     for i in self.facets :
+    #         liste_p.append( i.perimetre() )
+    #         # print(liste_p)
+    #     centroids = test_learn(liste_p )
+    #     # print(centroids)
+    #     for i in range(len(self.facets)):
+    #         for j in range(len(centroids)) :
+    #             # print("dans boucle")
+    #             # print( liste_p[i] , centroids[j][0] , centroids[j][1] )
+    #             # print(centroids[j][0],centroids[j][1])
+    #             if (liste_p[i] <= centroids[j][0]) :
+    #                 # print("dans boucle 2")
+    #                 # print(j)
+    #                 self.facets[i].categorie = j
+    #     return len(centroids)
 
 # Cette méthode utlise le k-mean
 
-def test_learn( liste_p ):
-    X = np.array(list(zip(liste_p,liste_p)))
-    # Number of clusters
-    kmeans = KMeans(n_clusters=3)
-    # Fitting the input data
-    kmeans = kmeans.fit(X)
-    # Getting the cluster labels
-    labels = kmeans.predict(X)
-    # Centroid values
-    centroids = kmeans.cluster_centers_
-    # Comparing with scikit-learn centroids
-    print(centroids) # From sci-kit learn
-    return centroids
+    def test_learn( self,nb_cluster = 2):
+        liste_p = []
+        for i in self.facets :
+            liste_p.append( i.perimetre() )
+        X = np.array(list(zip(liste_p,liste_p)))
+        kmeans = KMeans(n_clusters=3)
+        kmeans = kmeans.fit(X)
+        labels = kmeans.predict(X)
+        for i,j in zip(self.facets,labels) :
+            i.categorie = j
+
+
+    def test_learn_2D( self, nb_cluster = 2):
+
+        liste_p = []
+        liste_aire = []
+        for i in self.facets :
+            liste_p.append( i.perimetre() )
+            liste_aire.append(i.aire_tri())
+        X = np.array(list(zip(liste_p,liste_r)))
+        kmeans = KMeans(n_clusters=3)
+        kmeans = kmeans.fit(X)
+        labels = kmeans.predict(X)
+        for i,j in zip(self.facets,labels) :
+            i.categorie = j
 
 # Méthode D'Otsu
 
@@ -294,7 +321,7 @@ def Otsu( liste_p , n ):
                 tab[j].append( i )
     return tab
 
-                
+
 #===============================================================================#
 # Fonction externe #
 

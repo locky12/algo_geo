@@ -405,7 +405,7 @@ class Facet:
         # couleur
         self.couleurs = [ 0 , 0 , 0 ]
 
-        # 
+        #
         self.categorie = 0
         self.marq = 0
 
@@ -449,6 +449,10 @@ class Facet:
         v2 = liste_p[0].produit_vectoriel(liste_p[2])
         return 0.5*norm(dot(v1,v2) )
 
+
+
+
+
     # new : 1.1 // Renvoie les points de la face sous forme objet
     def adjacent_vertices_obj(self):
         vertex_a = Vertex(self.halfedge.vertex.x,self.halfedge.vertex.y,
@@ -462,7 +466,7 @@ class Facet:
                           self.halfedge.prev)
         return [ vertex_a , vertex_b , vertex_c ]
 
-    # 
+    #
     def perimetre(self):
         V = self.adjacent_vertices_obj()
         return ( V[0].distance(V[1]) + V[0].distance(V[2]) + V[1].distance(V[2]) )
@@ -542,7 +546,7 @@ class Halfedge:
             edges = edges.next
         return liste
 
-    # Renvoie les faces adjacentes 
+    # Renvoie les faces adjacentes
     def adjacente_face(self):
         liste = [ self.opposite.facet ]
         edges = self.next
