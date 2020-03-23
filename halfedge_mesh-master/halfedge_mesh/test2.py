@@ -26,11 +26,11 @@ mesh.write_file("model_off/bonhommeColorieComposante.off")
 print("=============================")
 print("Test coloration")
 
-nb_clusters =3
+nb_clusters = 3
 mesh = halfedge_mesh_heritage.HalfedgeMeshHerited("model_off/adapter.off")
 #print("diametre estimation = ", mesh.estimation_diametre())
 print("volume = ", mesh.Volume_mesh() )
-print("Moyenne coloration = ", mesh.test_learn_2D(nb_clusters))
+print("Moyenne coloration = ", mesh.test_learn(nb_clusters))
 mesh.colorie_categorie(nb_clusters)
 mesh.composante_connexes_face()
 

@@ -10,7 +10,7 @@ import halfedge_mesh
 #===================================================================#
 
 # .off are supported
-mesh = halfedge_mesh.HalfedgeMesh("model_off/ico.off")
+mesh = halfedge_mesh.HalfedgeMesh("model_off/tetris.off")
 
 print("=============================")
 print("test facets")
@@ -18,6 +18,7 @@ print("test facets")
 for i in mesh.facets:
     #print(i.adjacent_halfedges_index())
     t = i.adjacent_vertices_obj()
+    print( "aire =", i.aire_tri() )
     for j in t :
         continue
         #print( j.get_vertex() )

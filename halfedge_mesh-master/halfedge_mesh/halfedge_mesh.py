@@ -1,6 +1,7 @@
 import sys
 import math
 import functools
+import cmath
 # test
 # python3 compatibility
 try:
@@ -442,15 +443,19 @@ class Facet:
             g = g.next
         return li
 
-    # new : 1.2 // to do : structure de donnée problématique
+    # new : 1.2 // Surface d’un triangle par la formule de Héron
     def aire_tri(self):
         liste_p = self.adjacent_vertices_obj()
-        v1 = liste_p[0].produit_vectoriel(liste_p[1])
-        v2 = liste_p[0].produit_vectoriel(liste_p[2])
-        return 0.5*norm(dot(v1,v2) )
+        p1p2 = liste_p[0].distance( liste_p[1] ) 
+        p1p3 = liste_p[0].distance( liste_p[2] ) 
+        p2p3 = liste_p[1].distance( liste_p[2] ) 
+        s = (p1p2 + p1p3 + p2p3) / 2
+        A_Heron = math.sqrt( abs( s * (s - p1p2) * (s - p1p3) * (s - p2p3) ) ) 
 
+        #Autre formule plus simple
+        A = 0.25 * math.sqrt( abs(4*pow(p1p2,2)*pow(p1p3,2) - pow(( pow(p1p2,2) - pow(p1p3,2) - pow(p2p3,2) ),2) ) )
 
-
+        return A
 
 
     # new : 1.1 // Renvoie les points de la face sous forme objet

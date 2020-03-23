@@ -248,34 +248,11 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
     def colorie_categorie (self,k) :
         couleurs = genere_x_couleur(k)
         for f in self.facets :
-            print(couleurs)
-            print("f : ",f.categorie)
             f.couleurs = couleurs[f.categorie]
     #____________________________________________________________#
     #
     #   Partie : Segmentation par k-mean
     #____________________________________________________________#
-
-
-
-# Pas utile
-    # def start_segmentation_k_mean(self):
-    #     liste_p = []
-    #     for i in self.facets :
-    #         liste_p.append( i.perimetre() )
-    #         # print(liste_p)
-    #     centroids = test_learn(liste_p )
-    #     # print(centroids)
-    #     for i in range(len(self.facets)):
-    #         for j in range(len(centroids)) :
-    #             # print("dans boucle")
-    #             # print( liste_p[i] , centroids[j][0] , centroids[j][1] )
-    #             # print(centroids[j][0],centroids[j][1])
-    #             if (liste_p[i] <= centroids[j][0]) :
-    #                 # print("dans boucle 2")
-    #                 # print(j)
-    #                 self.facets[i].categorie = j
-    #     return len(centroids)
 
 # Cette méthode utlise le k-mean
 
@@ -291,15 +268,15 @@ class HalfedgeMeshHerited(halfedge_mesh.HalfedgeMesh):
             i.categorie = j
 
 
-    def test_learn_2D( self, nb_cluster = 2):
+    def test_learn_2D( self, nb_cluster ):
 
         liste_p = []
         liste_aire = []
         for i in self.facets :
             liste_p.append( i.perimetre() )
             liste_aire.append(i.aire_tri())
-        X = np.array(list(zip(liste_p,liste_r)))
-        kmeans = KMeans(n_clusters=3)
+        X = np.array(list(zip(liste_p,liste_aire)))
+        kmeans = KMeans(nb_cluster)
         kmeans = kmeans.fit(X)
         labels = kmeans.predict(X)
         for i,j in zip(self.facets,labels) :
